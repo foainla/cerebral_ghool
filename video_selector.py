@@ -5,8 +5,10 @@ client = TwelveLabs(api_key="tlk_241Z16H2R70KP22J4CV3K22801XG")
 def find_video(prompt,wanted,quality):
   page = client.search.query(index_id="66f1cde8163dbc55ba3bb220", query_text=prompt, options=["visual"])
   video_vec = []
+  i = 0
   for clip in page.data:
-      if clip.confidence == "high":
+      if clip.confidence == "high" and i<wanted+4:
+        i+=1
         video_dict = {"id":clip.video_id,"start":clip.start, "end":clip.end}
         video_quality = get_comment(quality, video_dict)
         video_dict["quality"] =video_quality
@@ -20,9 +22,9 @@ headers = {
     "x-api-key": "tlk_241Z16H2R70KP22J4CV3K22801XG",
     "Content-Type": "application/json"
 }
-from moviepy.editor import VideoFileClip
+from moviepy.editor import VideoFileClip, concatenate_videoclips
 
-def get_video(video_info, duration=9999, save_file=None):
+def get_video(video_info, save_file=None,duration=9999):
     url = f"https://api.twelvelabs.io/v1.2/indexes/{"66f1cde8163dbc55ba3bb220"}/videos/{video_info["id"]}"
     response = requests.get(url, headers=headers)
     video_url = response.json()["hls"]["video_url"]
@@ -32,7 +34,9 @@ def get_video(video_info, duration=9999, save_file=None):
         end = video_info["start"]+duration
     clip = VideoFileClip(video_url).subclip(start, end)
 
-    if save_file:
+    if save_file == "return":
+        return clip
+    elif save_file:
         clip.write_videofile(save_file, codec='libx264', audio_codec='aac')
     else:
         clip.preview()
@@ -52,9 +56,23 @@ def get_comment(prompt, video):
     return response.json()["data"]
 
 
+def concatenate_videos(video_files, save_file=None):
+    # Load the videos
+    clips = [VideoFileClip(video) for video in video_files]
 
-videos = find_video("forest",3,"suspense")
+    # Concatenate the video clips
+    final_clip = concatenate_videoclips(clips)
+    final_clip.audio = final_clip.audio.set_fps(44100)
+    # Write the result to a file
+    if save_file:
+        final_clip.write_videofile(save_file, codec='libx264', audio_codec='aac')
+    else:
+        final_clip.preview()
 
-get_video(videos[0],9999,"night_forest.mp4")
+concatenate_videos(["car_chase.mp4","forest_morning.mp4"])
+videos = find_video("car at night",3,"pov driving")
+get_video(videos[0])
 get_video(videos[1])
-get_video(videos[2])
+get_video(videos[2],"car_night_drive.mp4")
+
+
