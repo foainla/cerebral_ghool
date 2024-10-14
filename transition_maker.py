@@ -1,7 +1,7 @@
 from twelvelabs import TwelveLabs
 import requests
-
-client = TwelveLabs(api_key="tlk_241Z16H2R70KP22J4CV3K22801XG")
+ 
+client = TwelveLabs(api_key=# <use your own API key :)>)
 def find_video(prompt,wanted,quality):
   page = client.search.query(index_id="66f1cde8163dbc55ba3bb220", query_text=prompt, options=["visual"])
   video_vec = []
@@ -19,7 +19,7 @@ def find_video(prompt,wanted,quality):
 
 headers = {
     "accept": "application/json",
-    "x-api-key": "tlk_241Z16H2R70KP22J4CV3K22801XG",
+    "x-api-key": # <use your own API key :)>,
     "Content-Type": "application/json"
 }
 from moviepy.editor import VideoFileClip, concatenate_videoclips
@@ -71,7 +71,7 @@ def concatenate_videos(video_files, save_file=None):
 
 headers_mine = { #needed because the general credits ran out
     "accept": "application/json",
-    "x-api-key": "tlk_0PQYKQC3EA0KTA23VWRRD0VCPY2H",
+    "x-api-key": ##<use your own API key :)>,
     "Content-Type": "application/json"
 }
 
@@ -88,7 +88,7 @@ print(upload_id)
 
 upload_id = "670b8081eaac6725641d68b8"
 
-client_mine = TwelveLabs(api_key="tlk_0PQYKQC3EA0KTA23VWRRD0VCPY2H")
+client_mine = TwelveLabs(api_key=# <use your own API key :)>)
 
 from twelvelabs.models.task import Task
 def on_task_update(task: Task):
