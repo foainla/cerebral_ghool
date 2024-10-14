@@ -1,7 +1,7 @@
 from twelvelabs import TwelveLabs
 import requests
 
-client = TwelveLabs(api_key=# <use your own API key :)>)
+client = TwelveLabs(api_key=# <use your own API key please :)>)
 def find_video(prompt,wanted,quality):
   page = client.search.query(index_id="66f1cde8163dbc55ba3bb220", query_text=prompt, options=["visual"])
   video_vec = []
